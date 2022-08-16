@@ -57,8 +57,8 @@ public class UserDaoJDBCImpl implements UserDao {
     // Получение всех User(ов) из таблицы
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-
-        try (ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM users")) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM users");
+             ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 User user = new User(resultSet.getString("name"),
                         resultSet.getString("last_name"), resultSet.getByte("age"));
@@ -68,7 +68,6 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return users;
     }
 
